@@ -1289,13 +1289,59 @@ function MapView({
   const [venueQuery, setVenueQuery] = useState("");
   const [zoom, setZoom] = useState(1);
   const mapRef = useRef<HTMLDivElement>(null);
-  const venues = [...new Set(data.events.map((event) => event.venue))]
-    .filter((venue) => venue.toLowerCase().includes(venueQuery.toLowerCase()))
-    .sort();
-  const venueEvents = selectedVenue
-    ? data.events
-        .filter((event) => event.venue === selectedVenue)
-        .sort((left, right) => festivalTimestamp(left.startIso) - festivalTimestamp(right.startIso))
+  const venueEntries = useMemo(() => {
+    const entries = new Map<string, { key: string; name: string; events: FestivalEvent[] }>();
+
+    data.events.forEach((event) => {
+      const name = event.venue.trim().replace(/\s+/g, " ");
+      const key = name.normalize("NFKC").toLocaleLowerCase("en");
+      const existing = entries.get(key);
+
+      if (existing) {
+        existing.events.push(event);
+      } else {
+        entries.set(key, { key, name, events: [event] });
+      }
+    });
+
+    return [...entries.values()].sort((left, right) => left.name.localeCompare(right.name));
+  }, [data.events]);
+  const selectedVenueKey = selectedVenue
+    ?.trim()
+    .replace(/\s+/g, " ")
+    .normalize("NFKC")
+    .toLocaleLowerCase("en");
+  const selectedVenueEntry = venueEntries.find((entry) => entry.key === selectedVenueKey);
+  const activeVenueName = selectedVenueEntry?.name ?? selectedVenue;
+  const venues = venueEntries.filter((entry) =>
+    entry.name.toLocaleLowerCase("en").includes(venueQuery.trim().toLocaleLowerCase("en")),
+  );
+  const venueGroups = venues.reduce<
+    Array<{
+      key: string;
+      name: string;
+      nested: boolean;
+      venues: typeof venueEntries;
+    }>
+  >((groups, venue) => {
+    const separatorIndex = venue.name.indexOf(" · ");
+    const nested = separatorIndex >= 0;
+    const name = nested ? venue.name.slice(0, separatorIndex) : venue.name;
+    const key = name.normalize("NFKC").toLocaleLowerCase("en");
+    const existing = groups.find((group) => group.key === key && group.nested === nested);
+
+    if (existing) {
+      existing.venues.push(venue);
+    } else {
+      groups.push({ key, name, nested, venues: [venue] });
+    }
+
+    return groups;
+  }, []);
+  const venueEvents = selectedVenueEntry
+    ? [...selectedVenueEntry.events].sort(
+        (left, right) => festivalTimestamp(left.startIso) - festivalTimestamp(right.startIso),
+      )
     : [];
 
   useEffect(() => {
@@ -1333,7 +1379,7 @@ function MapView({
         <section className="selected-venue" aria-live="polite">
           <div>
             <p className="eyebrow">Selected place</p>
-            <h2>{selectedVenue}</h2>
+            <h2>{activeVenueName}</h2>
             <p>{venueEvents.length} happenings across the festival</p>
           </div>
           <MapPinned size={24} />
@@ -1341,7 +1387,13 @@ function MapView({
       )}
       <div className="map-shell" ref={mapRef}>
         <div className="map-frame">
-          <div className="map-canvas" style={{ width: `${zoom * 100}%` }}>
+          <div
+            className="map-canvas"
+            style={{
+              width: `${zoom * 100}%`,
+              minWidth: `${42 * zoom}rem`,
+            }}
+          >
             <img
               src={assetUrl(data.maps[mapType]) ?? ""}
               alt={`${mapType === "festival" ? "Festival" : "Camping"} map`}
@@ -1350,7 +1402,7 @@ function MapView({
           </div>
           <span>
             <LocateFixed size={15} />
-            {selectedVenue ? `${selectedVenue} selected` : "Drag to investigate"}
+            {activeVenueName ? `${activeVenueName} selected` : "Drag to investigate"}
           </span>
         </div>
         <div className="map-zoom" aria-label="Map zoom">
@@ -1409,19 +1461,47 @@ function MapView({
         />
       </label>
       <div className="venue-list">
-        {venues.map((venue) => (
-          <button
-            key={venue}
-            className={classNames(selectedVenue === venue && "is-active")}
-            onClick={() => onVenue(venue)}
-            aria-pressed={selectedVenue === venue}
-          >
-            <MapPinned size={17} />
-            <span>{venue}</span>
-            <b>{data.events.filter((event) => event.venue === venue).length}</b>
-            <ChevronRight size={17} />
-          </button>
-        ))}
+        {venueGroups.map((group) =>
+          group.nested ? (
+            <section className="venue-list__group" key={`group-${group.key}`}>
+              <header>
+                <MapPinned size={18} />
+                <strong>{group.name}</strong>
+                <small>{group.venues.length} spaces</small>
+              </header>
+              <div>
+                {group.venues.map((venue) => (
+                  <button
+                    key={venue.key}
+                    className={classNames(selectedVenueKey === venue.key && "is-active")}
+                    onClick={() => onVenue(venue.name)}
+                    aria-label={`${venue.name}, ${venue.events.length} happenings`}
+                    aria-pressed={selectedVenueKey === venue.key}
+                  >
+                    <span>{venue.name.slice(venue.name.indexOf(" · ") + 3)}</span>
+                    <b>{venue.events.length}</b>
+                    <ChevronRight size={17} />
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : (
+            group.venues.map((venue) => (
+              <button
+                key={venue.key}
+                className={classNames(selectedVenueKey === venue.key && "is-active")}
+                onClick={() => onVenue(venue.name)}
+                aria-label={`${venue.name}, ${venue.events.length} happenings`}
+                aria-pressed={selectedVenueKey === venue.key}
+              >
+                <MapPinned size={17} />
+                <span>{venue.name}</span>
+                <b>{venue.events.length}</b>
+                <ChevronRight size={17} />
+              </button>
+            ))
+          ),
+        )}
       </div>
     </div>
   );

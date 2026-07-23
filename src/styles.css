@@ -1268,8 +1268,8 @@ img {
 .map-zoom {
   position: absolute;
   z-index: 3;
+  top: 0.7rem;
   right: 0.7rem;
-  bottom: 0.7rem;
   display: flex;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.2);
@@ -1412,7 +1412,8 @@ img {
   gap: 0.4rem;
 }
 
-.venue-list > button {
+.venue-list > button,
+.venue-list__group > div > button {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center;
@@ -1428,17 +1429,60 @@ img {
   cursor: pointer;
 }
 
-.venue-list > button.is-active {
+.venue-list > button.is-active,
+.venue-list__group > div > button.is-active {
   border-color: rgba(98,231,255,.48);
   background: rgba(98,231,255,.09);
 }
 
-.venue-list svg {
+.venue-list > button svg,
+.venue-list__group > header svg {
   color: var(--cyan);
 }
 
 .venue-list b {
   color: var(--muted);
+}
+
+.venue-list__group {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  background: rgba(255,255,255,.018);
+}
+
+.venue-list__group > header {
+  min-height: 3.1rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.8rem;
+  background: rgba(98,231,255,.055);
+}
+
+.venue-list__group > header strong {
+  font-size: 0.76rem;
+}
+
+.venue-list__group > header small {
+  color: var(--cyan);
+  font-size: 0.61rem;
+  font-weight: 800;
+}
+
+.venue-list__group > div {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+}
+
+.venue-list__group > div > button {
+  grid-template-columns: 1fr auto auto;
+  border: 0;
+  border-radius: 0;
+  background: #1e142b;
+  padding-left: 2.5rem;
 }
 
 .empty-state {
