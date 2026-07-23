@@ -102,13 +102,13 @@ VENUE_NAMES = {
 }
 
 TITLE_OVERRIDES = {
-    "Bouke en co: Gratis kleding- halen & brengen": "Bouke & Co · Free Clothes — Take Some, Bring Some",
+    "Bouke en co: Gratis kleding- halen & brengen": "Bouke & Co · Free Clothes: Take Some, Bring Some",
     "Beeldenroute": "Art Route",
     "Beeldenroute Temple of Self": "Temple of Self Art Route",
     "Collectief in de Lucht": "Collective in the Air",
     "De Zevende Kleur presents: The Floating Fantasy": "The Seventh Colour presents: The Floating Fantasy",
     "Festival make-up/makeover met Shotgun Cilla": "Festival Make-up & Makeover with Shotgun Cilla",
-    "FOUTE VROUWEN...": "GUILTY-PLEASURE WOMEN…",
+    "FOUTE VROUWEN...": "GUILTY-PLEASURE WOMEN...",
     "Het Spiegelveld": "The Mirror Field",
     "In het Hart": "In the Heart",
     "Improvisatie theater": "Improvisation Theatre",
@@ -127,7 +127,7 @@ TITLE_OVERRIDES = {
     "Woven Voices Opening met Lex Empress": "Woven Voices Opening with Lex Empress",
     "Wij Doen Mee! van stichting Verwonderij": "We're In It Together! · Verwonderij Foundation",
     "Gesamtkunstwerk met Hessel Pijnaker open workshop": "Total Artwork · Open Workshop with Hessel Pijnaker",
-    "! RED HET GROENE VELD - TEKEN NU !": "SAVE THE GREEN FIELD — SIGN NOW!",
+    "! RED HET GROENE VELD - TEKEN NU !": "SAVE THE GREEN FIELD: SIGN NOW!",
     "Bouw mee aan het groeiende insectendorp - De luchtwezens": "Help Build the Growing Insect Village · Air Creatures",
     "Muziek verhaal met The Troubadour Car": "Music Story with The Troubadour Car",
     "De Grote Voortplantingsshow": "The Great Reproduction Show",
@@ -636,7 +636,7 @@ def main() -> None:
     events.sort(key=lambda event: (event["festivalDate"], event["sortMinutes"], event["venue"], event["title"]))
     output = {
         "meta": {
-            "name": "Landjuweel 2026 Companion",
+            "name": "Landjuweel 2026 Festival Planner",
             "sourceVersion": SOURCE_VERSION,
             "sourceUpdatedAt": "2026-07-20T14:26:24+02:00",
             "generatedAt": datetime.now().astimezone().isoformat(timespec="seconds"),

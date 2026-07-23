@@ -1,6 +1,6 @@
-# Landjuweel 2026 Companion
+# Landjuweel 2026 Festival Planner
 
-An unofficial, English-first, offline-friendly festival planner for Landjuweel 2026.
+An unofficial English festival planner for Landjuweel 2026. It caches the complete programme, maps, fonts, and artwork so the app keeps working when the mobile network gives up.
 
 ## What it does
 
@@ -44,7 +44,7 @@ repository-aware base path before updating that branch:
 
 ```bash
 GITHUB_ACTIONS=true \
-GITHUB_REPOSITORY=coconut-bunch/landjuweel-companion \
+GITHUB_REPOSITORY=coconut-bunch/landjuweel \
 npm run build
 ```
 

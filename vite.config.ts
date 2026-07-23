@@ -15,9 +15,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icon-192.png", "icon-512.png", "apple-touch-icon.png"],
       manifest: {
-        name: "Landjuweel 2026 Companion",
-        short_name: "LJ Companion",
-        description: "An unofficial English-first, offline festival planner for Landjuweel 2026.",
+        name: "Landjuweel 2026 Festival Planner",
+        short_name: "Landjuweel",
+        description: "The unofficial English festival planner that works without a signal.",
         theme_color: "#140c1f",
         background_color: "#140c1f",
         display: "standalone",
@@ -41,38 +41,10 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,json,woff,woff2,png,svg}"],
-        globIgnores: ["assets/artists/**/*.png"],
+        globPatterns: ["**/*.{js,css,html,json,woff,woff2,png,jpg,jpeg,svg}"],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         cleanupOutdatedCaches: true,
         navigateFallback: "index.html",
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) => url.pathname.includes("/assets/artists/"),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "landjuweel-artist-images-v1",
-              expiration: {
-                maxEntries: 520,
-                maxAgeSeconds: 60 * 60 * 24 * 30
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: ({ url }) => url.pathname.includes("/assets/stages/"),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "landjuweel-stage-images-v1",
-              expiration: {
-                maxEntries: 80,
-                maxAgeSeconds: 60 * 60 * 24 * 30
-              }
-            }
-          }
-        ]
       },
       devOptions: {
         enabled: true

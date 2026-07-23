@@ -13,8 +13,6 @@ import {
   MapPinned,
   Search,
   Sparkles,
-  Wifi,
-  WifiOff,
   X,
 } from "lucide-react";
 import {
@@ -73,7 +71,7 @@ function categoryStyle(category: Category): CSSProperties {
 }
 
 function formatTimeRange(event: FestivalEvent): string {
-  return `${event.start}–${event.end}`;
+  return `${event.start} - ${event.end}`;
 }
 
 function localDateKey(value: Date): string {
@@ -100,21 +98,6 @@ function eventsOverlap(left: FestivalEvent, right: FestivalEvent): boolean {
     new Date(left.startIso).getTime() < new Date(right.endIso).getTime() &&
     new Date(left.endIso).getTime() > new Date(right.startIso).getTime()
   );
-}
-
-function useOnlineStatus(): boolean {
-  const [online, setOnline] = useState(() => navigator.onLine);
-  useEffect(() => {
-    const goOnline = () => setOnline(true);
-    const goOffline = () => setOnline(false);
-    window.addEventListener("online", goOnline);
-    window.addEventListener("offline", goOffline);
-    return () => {
-      window.removeEventListener("online", goOnline);
-      window.removeEventListener("offline", goOffline);
-    };
-  }, []);
-  return online;
 }
 
 function useFestivalData(): {
@@ -151,7 +134,6 @@ function App() {
   const [userState, setUserState] = useState<LocalUserState | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<FestivalEvent | null>(null);
   const [showInfo, setShowInfo] = useState(false);
-  const online = useOnlineStatus();
 
   useEffect(() => {
     if (data && !userState) {
@@ -204,17 +186,15 @@ function App() {
       <a className="skip-link" href="#main-content">Skip to programme</a>
       <header className="app-header">
         <button className="brand-lockup" onClick={() => setTab("now")} aria-label="Go to Now">
-          <span className="brand-mark">LJ</span>
+          <span className="brand-mark">
+            <img src={assetUrl("icon-512.png") ?? ""} alt="" />
+          </span>
           <span>
             <strong>Landjuweel</strong>
-            <small>2026 companion</small>
+            <small>Pocket field guide</small>
           </span>
         </button>
         <div className="header-actions">
-          <span className={classNames("network-pill", !online && "network-pill--offline")}>
-            {online ? <Wifi size={14} /> : <WifiOff size={14} />}
-            {online ? "Online" : "Offline ready"}
-          </span>
           <button className="icon-button" onClick={() => setShowInfo(true)} aria-label="Practical information">
             <Info size={20} />
           </button>
@@ -317,8 +297,8 @@ function LoadingView() {
       <div className="loading-orbit" aria-hidden="true">
         <span />
       </div>
-      <p className="eyebrow">Opening the portal</p>
-      <h1>Gathering the programme…</h1>
+      <p className="eyebrow">Consulting the tiny oracle</p>
+      <h1>Unfolding the programme...</h1>
     </div>
   );
 }
@@ -327,12 +307,12 @@ function ErrorView({ message }: { message: string }) {
   return (
     <div className="state-view">
       <PsychedelicBackdrop />
-      <WifiOff size={42} />
-      <p className="eyebrow">The portal flickered</p>
-      <h1>Programme unavailable</h1>
+      <Compass size={42} />
+      <p className="eyebrow">Well, that's odd</p>
+      <h1>The programme wandered off</h1>
       <p>{message}</p>
       <button className="primary-button" onClick={() => window.location.reload()}>
-        Try again
+        Summon it again
       </button>
     </div>
   );
@@ -368,7 +348,7 @@ function NowView({
   onExplore: (category: Category) => void;
 }) {
   const now = new Date();
-  const today = now.toISOString().slice(0, 10);
+  const today = localDateKey(now);
   const activeDay = data.days.some((day) => day.date === today)
     ? today
     : userState.lastSelectedDay;
@@ -388,31 +368,49 @@ function NowView({
     <div className="view-stack">
       <section className="hero-card">
         <div className="hero-card__rings" aria-hidden="true" />
-        <p className="eyebrow">{day.name} · Ruigoord</p>
-        <h1>Find your way<br />through the wild.</h1>
+        <img
+          className="hero-card__logo"
+          src={assetUrl("icon-512.png") ?? ""}
+          alt="Landjuweel psychedelic portal"
+        />
+        <p className="eyebrow">{day.name} at Ruigoord</p>
+        <h1>Make a plan.<br />Lose it beautifully.</h1>
         <p className="hero-card__intro">
-          {dayEvents.length} happenings, one beautifully strange day. Build a plan and leave room for surprise.
+          {dayEvents.length} things are happening today. Pick a few, follow the music,
+          and leave one suspiciously large gap for accidental magic.
         </p>
         <div className="hero-card__actions">
           <button className="primary-button" onClick={() => onNavigate("schedule")}>
-            Open schedule <ChevronRight size={18} />
+            Show me the schedule <ChevronRight size={18} />
           </button>
           <button className="secondary-button" onClick={() => onNavigate("map")}>
-            <MapPinned size={17} /> View map
+            <MapPinned size={17} /> Where am I?
           </button>
         </div>
       </section>
 
       <div className="stat-strip" aria-label="Festival summary">
-        <div><strong>{data.meta.eventCount}</strong><span>happenings</span></div>
-        <div><strong>{new Set(data.events.map((event) => event.venue)).size}</strong><span>places</span></div>
-        <div><strong>{userState.plannedEventIds.length}</strong><span>in your plan</span></div>
+        <button type="button" onClick={() => onNavigate("schedule")}>
+          <strong>{data.meta.eventCount}</strong>
+          <span>happenings</span>
+          <small>Browse the beautiful mess <ChevronRight size={13} /></small>
+        </button>
+        <button type="button" onClick={() => onNavigate("map")}>
+          <strong>{new Set(data.events.map((event) => event.venue)).size}</strong>
+          <span>places</span>
+          <small>Go get pleasantly lost <ChevronRight size={13} /></small>
+        </button>
+        <button type="button" onClick={() => onNavigate("plan")}>
+          <strong>{userState.plannedEventIds.length}</strong>
+          <span>in your plan</span>
+          <small>Inspect your good intentions <ChevronRight size={13} /></small>
+        </button>
       </div>
 
       {nextPlanned && (
         <section className="next-plan-card">
           <div>
-            <p className="eyebrow">Your next portal</p>
+            <p className="eyebrow">Next on your highly scientific plan</p>
             <h2>{nextPlanned.title}</h2>
             <p>{nextPlanned.dayLabel} · {formatTimeRange(nextPlanned)} · {nextPlanned.venue}</p>
           </div>
@@ -423,8 +421,8 @@ function NowView({
       )}
 
       <SectionHeading
-        eyebrow={happening.length > 0 ? "Live pulse" : "The day is waking up"}
-        title={happening.length > 0 ? "Happening now" : "Coming up"}
+        eyebrow={happening.length > 0 ? "Already in progress" : "Not yet, keen bean"}
+        title={happening.length > 0 ? "Happening right now" : "Coming up shortly"}
         action={<button onClick={() => onNavigate("schedule")}>See all</button>}
       />
       <div className="event-grid event-grid--horizontal">
@@ -443,7 +441,7 @@ function NowView({
         ))}
       </div>
 
-      <SectionHeading eyebrow="Choose a frequency" title="Explore by energy" />
+      <SectionHeading eyebrow="Pick a rabbit hole" title="Browse by vibe" />
       <div className="category-mosaic">
         {data.categories.slice(0, 6).map((category) => {
           const count = data.events.filter((event) => event.category === category).length;
@@ -519,9 +517,9 @@ function ScheduleView({
   return (
     <div className="view-stack">
       <PageIntro
-        eyebrow="All 799 happenings"
-        title="Shape your day"
-        description="Search the full programme, follow the threads that call to you, then add exact time slots to your plan."
+        eyebrow="The whole glorious mess"
+        title="Build something resembling a plan"
+        description="Search everything, save the exact times you fancy, then pretend you will not change your mind later."
       />
       <DaySelector days={data.days} selected={day.date} onSelect={onSelectDay} />
 
@@ -530,7 +528,7 @@ function ScheduleView({
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search artists, workshops, places…"
+          placeholder="Search artists, workshops, places..."
           aria-label="Search the schedule"
         />
         {query && (
@@ -557,7 +555,7 @@ function ScheduleView({
         ))}
       </div>
       <div className="schedule-toolbar">
-        <p><strong>{filtered.length}</strong> results for {day.name}</p>
+        <p><strong>{filtered.length}</strong> possibilities for {day.name}</p>
         <button
           className={classNames("favorite-filter", favoritesOnly && "is-active")}
           onClick={() => setFavoritesOnly((value) => !value)}
@@ -570,8 +568,8 @@ function ScheduleView({
       {grouped.length === 0 ? (
         <EmptyState
           icon={<Search size={30} />}
-          title="Nothing in this orbit"
-          body="Try a different phrase, category, or turn off the favorites filter."
+          title="Nope. Nothing lives here."
+          body="Try another phrase or category. The favorites filter may also be feeling dramatic."
         />
       ) : (
         <div className="agenda">
@@ -628,10 +626,10 @@ function ExploreView({
     }
   }, [initialCategory]);
   const collectionRules: Array<{ label: string; tag: string; icon: ReactNode }> = [
-    { label: "Dance after midnight", tag: "Late night", icon: <Sparkles size={18} /> },
-    { label: "Hands-on workshops", tag: "Interactive", icon: <Compass size={18} /> },
-    { label: "Family picks", tag: "Family friendly", icon: <Heart size={18} /> },
-    { label: "Out in the wild", tag: "Outdoors", icon: <MapPinned size={18} /> },
+    { label: "Dance until time gets blurry", tag: "Late night", icon: <Sparkles size={18} /> },
+    { label: "Make things with your hands", tag: "Interactive", icon: <Compass size={18} /> },
+    { label: "Tiny humans welcome", tag: "Family friendly", icon: <Heart size={18} /> },
+    { label: "Fresh air, allegedly", tag: "Outdoors", icon: <MapPinned size={18} /> },
   ];
   const visible = collection
     ? data.events.filter((event) => event.tags.includes(collection)).slice(0, 24)
@@ -640,9 +638,9 @@ function ExploreView({
   return (
     <div className="view-stack">
       <PageIntro
-        eyebrow="Follow your curiosity"
-        title="Explore the strange"
-        description="From deep-night frequencies to slow morning rituals, find a thread and see where it leads."
+        eyebrow="Choose your own detour"
+        title="Find your weird"
+        description="Pick a mood, poke around, and see what happens. This is how sensible plans become better stories."
       />
 
       <div className="collection-grid">
@@ -659,7 +657,7 @@ function ExploreView({
         ))}
       </div>
 
-      <SectionHeading eyebrow="Programme currents" title="Browse by type" />
+      <SectionHeading eyebrow="Useful pigeonholes" title="Browse by type" />
       <div className="category-list">
         {data.categories.map((category) => (
           <button
@@ -736,9 +734,9 @@ function PlanView({
   return (
     <div className="view-stack">
       <PageIntro
-        eyebrow="Your local constellation"
+        eyebrow="Your extremely official unofficial plan"
         title="My Plan"
-        description="Saved only in this browser. No account, no tracking, no algorithm between you and the festival."
+        description="It lives only in this browser. No account, no tracking, and no little algorithm judging your taste."
       />
       <div className="plan-summary">
         <div><strong>{planned.length}</strong><span>planned moments</span></div>
@@ -751,8 +749,8 @@ function PlanView({
       {planned.length === 0 ? (
         <EmptyState
           icon={<CalendarPlus size={32} />}
-          title="Your plan is an open canvas"
-          body="Explore the schedule and add exact performances. You can still heart artists without choosing a time."
+          title="A beautiful blank mess"
+          body="Add exact performances from the schedule. You can still heart artists while refusing to commit to a time."
           action={<button className="primary-button" onClick={() => onNavigate("schedule")}>Browse schedule</button>}
         />
       ) : (
@@ -818,9 +816,9 @@ function MapView({ data, onShowInfo }: { data: FestivalData; onShowInfo: () => v
   return (
     <div className="view-stack">
       <PageIntro
-        eyebrow="Forty-one places to wander"
-        title="Map the magic"
-        description="Pinch and zoom the official map, then use the venue index to decode where everything happens."
+        eyebrow="Forty-one places. Excellent odds of getting lost."
+        title="Where am I again?"
+        description="Pinch and zoom the official map, then use the venue list when confidence fails."
       />
       <div className="segmented-control">
         <button className={classNames(mapType === "festival" && "is-active")} onClick={() => setMapType("festival")}>
@@ -832,23 +830,23 @@ function MapView({ data, onShowInfo }: { data: FestivalData; onShowInfo: () => v
       </div>
       <div className="map-frame">
         <img src={assetUrl(data.maps[mapType]) ?? ""} alt={`${mapType === "festival" ? "Festival" : "Camping"} map`} />
-        <span><LocateFixed size={15} /> Pinch to explore</span>
+        <span><LocateFixed size={15} /> Pinch to investigate</span>
       </div>
       <button className="info-banner" onClick={onShowInfo}>
         <span><Info size={21} /></span>
         <div>
-          <strong>Practical field guide</strong>
-          <small>Opening times, camping, care, sustainability and family info</small>
+          <strong>Useful things before chaos begins</strong>
+          <small>Opening times, camping, care, family info, and other sensible bits</small>
         </div>
         <ChevronRight size={20} />
       </button>
-      <SectionHeading eyebrow="Wayfinding" title="Venue index" />
+      <SectionHeading eyebrow="Wayfinding, more or less" title="The big list of places" />
       <label className="search-field">
         <Search size={19} />
         <input
           value={venueQuery}
           onChange={(event) => setVenueQuery(event.target.value)}
-          placeholder="Find a venue…"
+          placeholder="Find a venue..."
           aria-label="Search venues"
         />
       </label>
@@ -1005,7 +1003,9 @@ function EventSheet({
               {event.descriptionIsExcerpt && <small>Translated profile excerpt</small>}
             </div>
           ) : (
-            <p className="muted-copy">No detailed profile was supplied for this happening.</p>
+            <p className="muted-copy">
+              This mysterious happening arrived without a biography. Bold choice.
+            </p>
           )}
           {contributors.length > 1 && (
             <div className="contributors">
@@ -1033,8 +1033,8 @@ function InfoSheet({ data, onClose }: { data: FestivalData; onClose: () => void 
       <article className="sheet info-sheet">
         <div className="sheet__header">
           <div>
-            <p className="eyebrow">Practical field guide</p>
-            <h2 id="info-sheet-title">Know before you wander</h2>
+            <p className="eyebrow">The sensible corner</p>
+            <h2 id="info-sheet-title">Read this before improvising everything</h2>
           </div>
           <button className="sheet-close sheet-close--inline" onClick={onClose} aria-label="Close">
             <X size={21} />
@@ -1163,9 +1163,9 @@ function DisclaimerCard({ meta }: { meta: FestivalData["meta"] }) {
     <div className="disclaimer-card">
       <Sparkles size={19} />
       <div>
-        <strong>Made by festival-goers, for festival-goers.</strong>
+        <strong>Made by festival-goers with questionable sleep schedules.</strong>
         <p>
-          Unofficial English companion. Programme snapshot from{" "}
+          Unofficial English field guide. Programme snapshot from{" "}
           {new Date(meta.sourceUpdatedAt).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",

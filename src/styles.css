@@ -181,6 +181,13 @@ img {
   font-family: "Shrikhand", serif;
   font-size: 1rem;
   box-shadow: 0 0 0 2px rgba(255,255,255,.14), 0 0 25px rgba(216,255,79,.18);
+  overflow: hidden;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-lockup strong,
@@ -204,26 +211,6 @@ img {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-}
-
-.network-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--acid);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  padding: 0.48rem 0.68rem;
-  border: 1px solid rgba(216,255,79,.23);
-  border-radius: 999px;
-  background: rgba(216,255,79,.06);
-}
-
-.network-pill--offline {
-  color: var(--orange);
-  border-color: rgba(255,132,80,.28);
-  background: rgba(255,132,80,.08);
 }
 
 .icon-button {
@@ -311,6 +298,20 @@ img {
   z-index: 1;
 }
 
+.hero-card__logo {
+  position: absolute;
+  top: clamp(1.2rem, 3vw, 2rem);
+  right: clamp(1.2rem, 3vw, 2rem);
+  width: clamp(6.5rem, 19vw, 11rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 38% 62% 55% 45% / 47% 42% 58% 53%;
+  box-shadow:
+    0 0 0 0.45rem rgba(216,255,79,.08),
+    0 20px 60px rgba(5,0,15,.42);
+  transform: rotate(3deg);
+}
+
 .hero-card h1,
 .page-intro h1,
 .state-view h1 {
@@ -390,11 +391,26 @@ img {
   background: var(--line);
 }
 
-.stat-strip > div,
+.stat-strip > button,
 .plan-summary > div {
   min-width: 0;
   padding: 1rem;
   background: rgba(28,18,40,.88);
+}
+
+.stat-strip > button {
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.stat-strip > button:hover {
+  background: rgba(48,30,64,.96);
+}
+
+.stat-strip > button:active {
+  transform: translateY(1px);
 }
 
 .stat-strip strong,
@@ -411,6 +427,16 @@ img {
   display: block;
   color: var(--muted);
   font-size: 0.69rem;
+  line-height: 1.25;
+}
+
+.stat-strip small {
+  display: flex;
+  align-items: center;
+  gap: 0.18rem;
+  margin-top: 0.42rem;
+  color: rgba(255,249,232,.7);
+  font-size: 0.58rem;
   line-height: 1.25;
 }
 
@@ -1620,6 +1646,26 @@ img {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 520px) {
+  .stat-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-strip > button {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .stat-strip small {
+    justify-self: end;
+    margin-top: 0;
+    text-align: right;
+  }
 }
 
 @media (min-width: 760px) {
