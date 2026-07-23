@@ -513,6 +513,11 @@ img {
 
 .section-heading > button,
 .section-heading > *:last-child:not(div) {
+  min-width: 3rem;
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   padding: 0.4rem;
   color: var(--acid);
