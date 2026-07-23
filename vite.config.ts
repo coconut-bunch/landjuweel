@@ -42,9 +42,27 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,json,woff,woff2,png,jpg,jpeg,svg}"],
+        globIgnores: ["assets/artists/**/*", "assets/stages/**/*"],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         cleanupOutdatedCaches: true,
         navigateFallback: "index.html",
+        runtimeCaching: [
+          {
+            urlPattern: /\/assets\/(?:artists|stages)\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "landjuweel-artwork-v1",
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+              expiration: {
+                maxEntries: 500,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+                purgeOnQuotaError: true
+              }
+            }
+          }
+        ]
       },
       devOptions: {
         enabled: true

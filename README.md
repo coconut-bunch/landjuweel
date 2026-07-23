@@ -1,6 +1,6 @@
 # Landjuweel 2026 Festival Planner
 
-An unofficial English festival planner for Landjuweel 2026. It caches the complete programme, maps, fonts, and artwork so the app keeps working when the mobile network gives up.
+An unofficial English festival planner for Landjuweel 2026. It keeps the complete programme, maps, and app interface available offline. Artist and stage artwork is cached for a year after the first view, so repeat visits do not keep fetching the same images.
 
 ## What it does
 
