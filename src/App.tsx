@@ -1819,12 +1819,11 @@ function EmptyState({
 
 function DisclaimerCard({ meta }: { meta: FestivalData["meta"] }) {
   return (
-    <div className="disclaimer-card">
-      <Sparkles size={19} />
+    <footer className="disclaimer-card">
       <div>
-        <strong>Made by festival-goers with questionable sleep schedules.</strong>
+        <strong>Dear Ruigoord: please don’t sue me. I love you guys; I just can’t read Dutch. 🫂</strong>
         <p>
-          Unofficial English field guide. Programme snapshot from{" "}
+          An unofficial English field guide, translated with love. Programme snapshot from{" "}
           {new Date(meta.sourceUpdatedAt).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
@@ -1832,7 +1831,7 @@ function DisclaimerCard({ meta }: { meta: FestivalData["meta"] }) {
           })}.
         </p>
       </div>
-    </div>
+    </footer>
   );
 }
 
