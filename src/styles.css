@@ -2070,6 +2070,86 @@ img {
   }
 }
 
+/*
+ * Firefox Android is much more sensitive than Chromium/WebKit to fixed layers
+ * that combine backdrop blur, filters, blending, and persistent will-change.
+ * Keep the same visual language there, but let the decorative background scroll
+ * normally and use opaque compositor-friendly surfaces.
+ */
+@supports (-moz-appearance: none) {
+  @media (max-width: 760px) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .psychedelic-backdrop {
+      position: absolute;
+    }
+
+    .psychedelic-backdrop::after {
+      opacity: 0.09;
+      mix-blend-mode: normal;
+    }
+
+    .psychedelic-backdrop__orb {
+      filter: none;
+      opacity: 0.055;
+      animation: none;
+    }
+
+    .brand-mark {
+      filter: none;
+      will-change: transform;
+      animation: portal-breathe 3.8s ease-in-out infinite;
+    }
+
+    .app-header {
+      background: rgba(20, 12, 31, 0.985);
+      backdrop-filter: none;
+    }
+
+    .bottom-nav {
+      background: rgba(25, 15, 37, 0.99);
+      backdrop-filter: none;
+      box-shadow: 0 -8px 28px rgba(5, 0, 12, 0.3);
+    }
+
+    .secondary-button,
+    .map-frame > span,
+    .sheet-scrim,
+    .sheet-close {
+      backdrop-filter: none;
+    }
+
+    .event-grid--horizontal {
+      scroll-snap-type: none;
+    }
+
+    .event-grid--horizontal .event-card {
+      scroll-snap-align: none;
+    }
+
+    .event-card {
+      box-shadow: 0 5px 16px rgba(6, 2, 12, 0.12);
+    }
+
+    .sheet {
+      box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.42);
+    }
+  }
+}
+
+@keyframes portal-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.055);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
