@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finding the Landjuweel path…</title>
+  </head>
+  <body>
+    <p>Finding the path through the wild…</p>
+    <script>
+      const base = "/landjuweel/";
+      const route = window.location.pathname.startsWith(base)
+        ? window.location.pathname.slice(base.length).replace(/\/+$/, "")
+        : "";
+      const knownRoutes = new Set(["now", "schedule", "explore", "plan", "map", "info"]);
+      const destination = knownRoutes.has(route) ? route : "now";
+      window.location.replace(`${base}#/${destination}${window.location.search}`);
+    </script>
+  </body>
+</html>

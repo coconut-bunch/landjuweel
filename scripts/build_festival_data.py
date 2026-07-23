@@ -102,6 +102,7 @@ VENUE_NAMES = {
 }
 
 TITLE_OVERRIDES = {
+    "(H)oer Hollandse spelletjes": "Wildly Dutch Games",
     "Bouke en co: Gratis kleding- halen & brengen": "Bouke & Co · Free Clothes: Take Some, Bring Some",
     "Beeldenroute": "Art Route",
     "Beeldenroute Temple of Self": "Temple of Self Art Route",
@@ -138,6 +139,14 @@ TITLE_OVERRIDES = {
     "Various DJ's en drums CLOSING": "Various DJs & Drums · Closing",
     "Open Jam sessie": "Open Jam Session",
     "Vrouwencirkel - De Stem van je Voormoeders": "Women's Circle · The Voice of Your Female Ancestors",
+    "Kids Show door Jozefien": "Kids' Show by Jozefien",
+    "Klei Jezelf Blij Workshop": "Clay Yourself Happy Workshop",
+    "Lach Workshop": "Laughter Workshop",
+    "Poppenkastvoorstelling": "Puppet Show",
+    "Spirit Songs door Anouk Anansi": "Spirit Songs by Anouk Anansi",
+    "Stemvork Healing door Shamatty": "Tuning Fork Healing by Shamatty",
+    "Workshop Lino Stempelen": "Lino Stamp Workshop",
+    "XXL spellen: Schaken, Jenga, Twister": "XXL Games: Chess, Jenga & Twister",
     "MIJNHEER van Ouwenaar": "MIJNHEER van Ouwenaar",
     "Riet(j)uweel voor Stembehoud met Yente & Ocean": "Reed Jewel for Voice Preservation with Yente & Ocean",
     "Billenschudden met DJ Dragonslayer": "Shake Your Booty with DJ Dragonslayer",
@@ -606,6 +615,8 @@ def main() -> None:
     normalized_info = []
     for topic_index, topic in enumerate(info_source):
         topic_title = translator.translate(topic["topic"], f"info topic {topic_index}", force=True)
+        if topic_title == "Everything about the Alles kids and Ruigoord.":
+            topic_title = "Everything about children and Ruigoord"
         entries = []
         for entry in topic["subTopics"]:
             info_description, info_is_excerpt = excerpt(entry.get("desc", ""), limit=1800)
@@ -625,6 +636,22 @@ def main() -> None:
                     "descriptionIsExcerpt": info_is_excerpt,
                 }
             )
+        if topic_index == 1:
+            for normalized_entry in entries:
+                if normalized_entry["id"] == "1-11":
+                    normalized_entry["description"] = normalized_entry["description"].replace(
+                        "Natural High-veld", "Natural High field"
+                    )
+        if topic_index == 2:
+            for normalized_entry in entries:
+                if normalized_entry["id"] == "2-1":
+                    normalized_entry["description"] = (
+                        "Thu 14:00 – 04:00\n"
+                        "Fri 12:00 – 05:00\n"
+                        "Sat 12:00 – 04:00\n"
+                        "Sun 12:00 – 05:00"
+                    )
+                    normalized_entry["descriptionIsExcerpt"] = False
         normalized_info.append(
             {
                 "id": f"topic-{topic_index}",
