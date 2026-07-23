@@ -290,28 +290,10 @@ img {
   min-height: 0;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(0.7rem, 2vw, 1.1rem);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 2rem;
   background: #ead7bd;
   box-shadow: var(--shadow);
-}
-
-.hero-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, transparent 72%, rgba(18,8,25,.38) 100%);
-  z-index: 1;
-}
-
-.hero-card > * {
-  position: relative;
-  z-index: 2;
 }
 
 .hero-card__art {
@@ -324,18 +306,6 @@ img {
   z-index: 0;
 }
 
-.hero-card__caption {
-  width: fit-content;
-  max-width: min(100%, 22rem);
-  padding: 0.65rem 0.85rem 0.72rem;
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 1rem;
-  background: rgba(22,11,31,.68);
-  box-shadow: 0 10px 30px rgba(13,5,19,.18);
-  backdrop-filter: blur(8px);
-}
-
-.hero-card h1,
 .page-intro h1,
 .state-view h1 {
   margin: 0;
@@ -343,13 +313,6 @@ img {
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 0.98;
-}
-
-.hero-card h1 {
-  max-width: none;
-  font-size: clamp(1.2rem, 3.7vw, 1.8rem);
-  line-height: 1.08;
-  text-shadow: 0 4px 24px rgba(7,2,12,.65);
 }
 
 .hero-card__actions {

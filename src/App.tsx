@@ -373,10 +373,6 @@ function NowView({
             src={assetUrl("landjuweel-dali-hero.png") ?? ""}
             alt="Surreal watercolor elephants crossing the Dutch wetlands toward Landjuweel"
           />
-          <div className="hero-card__caption">
-            <p className="eyebrow">{day.name} at Ruigoord</p>
-            <h1>Find your way through the wild.</h1>
-          </div>
         </section>
         <div className="hero-card__actions">
           <button className="primary-button" onClick={() => onNavigate("schedule")}>
