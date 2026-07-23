@@ -366,25 +366,27 @@ function NowView({
 
   return (
     <div className="view-stack">
-      <section className="hero-card">
-        <img
-          className="hero-card__art"
-          src={assetUrl("landjuweel-dali-hero.png") ?? ""}
-          alt="Surreal watercolor elephants crossing the Dutch wetlands toward Landjuweel"
-        />
-        <div className="hero-card__overlay">
-          <p className="eyebrow">{day.name} at Ruigoord</p>
-          <h1>Find your way<br />through the wild.</h1>
-          <div className="hero-card__actions">
-            <button className="primary-button" onClick={() => onNavigate("schedule")}>
-              Show me the schedule <ChevronRight size={18} />
-            </button>
-            <button className="secondary-button" onClick={() => onNavigate("map")}>
-              <MapPinned size={17} /> Where am I?
-            </button>
+      <div className="hero-block">
+        <section className="hero-card">
+          <img
+            className="hero-card__art"
+            src={assetUrl("landjuweel-dali-hero.png") ?? ""}
+            alt="Surreal watercolor elephants crossing the Dutch wetlands toward Landjuweel"
+          />
+          <div className="hero-card__caption">
+            <p className="eyebrow">{day.name} at Ruigoord</p>
+            <h1>Find your way through the wild.</h1>
           </div>
+        </section>
+        <div className="hero-card__actions">
+          <button className="primary-button" onClick={() => onNavigate("schedule")}>
+            Schedule <ChevronRight size={18} />
+          </button>
+          <button className="secondary-button" onClick={() => onNavigate("map")}>
+            <MapPinned size={17} /> Map
+          </button>
         </div>
-      </section>
+      </div>
 
       <div className="stat-strip" aria-label="Festival summary">
         <button type="button" onClick={() => onNavigate("schedule")}>
