@@ -367,25 +367,22 @@ function NowView({
   return (
     <div className="view-stack">
       <section className="hero-card">
-        <div className="hero-card__rings" aria-hidden="true" />
         <img
-          className="hero-card__logo"
-          src={assetUrl("icon-512.png") ?? ""}
-          alt="Landjuweel psychedelic portal"
+          className="hero-card__art"
+          src={assetUrl("landjuweel-dali-hero.png") ?? ""}
+          alt="Surreal watercolor elephants crossing the Dutch wetlands toward Landjuweel"
         />
-        <p className="eyebrow">{day.name} at Ruigoord</p>
-        <h1>Make a plan.<br />Lose it beautifully.</h1>
-        <p className="hero-card__intro">
-          {dayEvents.length} things are happening today. Pick a few, follow the music,
-          and leave one suspiciously large gap for accidental magic.
-        </p>
-        <div className="hero-card__actions">
-          <button className="primary-button" onClick={() => onNavigate("schedule")}>
-            Show me the schedule <ChevronRight size={18} />
-          </button>
-          <button className="secondary-button" onClick={() => onNavigate("map")}>
-            <MapPinned size={17} /> Where am I?
-          </button>
+        <div className="hero-card__overlay">
+          <p className="eyebrow">{day.name} at Ruigoord</p>
+          <h1>Find your way<br />through the wild.</h1>
+          <div className="hero-card__actions">
+            <button className="primary-button" onClick={() => onNavigate("schedule")}>
+              Show me the schedule <ChevronRight size={18} />
+            </button>
+            <button className="secondary-button" onClick={() => onNavigate("map")}>
+              <MapPinned size={17} /> Where am I?
+            </button>
+          </div>
         </div>
       </section>
 
