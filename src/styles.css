@@ -286,9 +286,6 @@ img {
 }
 
 .hero-card {
-  position: relative;
-  min-height: 0;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 2rem;
@@ -297,13 +294,9 @@ img {
 }
 
 .hero-card__art {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 68% center;
-  z-index: 0;
+  height: auto;
 }
 
 .page-intro h1,
@@ -1660,15 +1653,6 @@ img {
     padding-bottom: 8rem;
   }
 
-  .hero-card {
-    min-height: 0;
-    aspect-ratio: 1735 / 907;
-  }
-
-  .hero-card__art {
-    object-position: center;
-  }
-
   .hero-card__actions {
     justify-content: flex-end;
   }
@@ -1717,10 +1701,6 @@ img {
   .view-stack {
     max-width: 61rem;
     margin: 0 auto;
-  }
-
-  .hero-card {
-    min-height: 0;
   }
 
   .event-grid {

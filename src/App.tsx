@@ -372,6 +372,8 @@ function NowView({
             className="hero-card__art"
             src={assetUrl("landjuweel-dali-hero.png") ?? ""}
             alt="Surreal watercolor elephants crossing the Dutch wetlands toward Landjuweel"
+            width={1735}
+            height={907}
           />
         </section>
         <div className="hero-card__actions">
