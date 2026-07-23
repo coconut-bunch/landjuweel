@@ -1821,7 +1821,7 @@ function DisclaimerCard({ meta }: { meta: FestivalData["meta"] }) {
   return (
     <footer className="disclaimer-card">
       <div>
-        <strong>Dear Ruigoord: please don’t sue me. I love you guys; I just can’t read Dutch. 🫂</strong>
+        <strong>Dear Ruigoord: please don’t sue me. I love you guys; I just can’t read Dutch. 🫂💚</strong>
         <p>
           An unofficial English field guide, translated with love. Programme snapshot from{" "}
           {new Date(meta.sourceUpdatedAt).toLocaleDateString("en-GB", {
